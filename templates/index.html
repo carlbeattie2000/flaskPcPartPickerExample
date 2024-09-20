@@ -1,0 +1,65 @@
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 62.5%;
+  }
+
+  body {
+    font-size: 1.6rem;
+    font-family: Arial;
+    margin: 1rem;
+  }
+
+  input {
+    padding: 1.5rem;
+    font-size: 2rem;
+  }
+
+  button {
+    padding: 1.5rem;
+    font-size: 2rem;
+    background: transparent;
+    border: 1px solid #000;
+    border-radius: .6rem;
+  }
+
+  p {
+    margin: 1rem 0 0 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+</style>
+
+<input placeholder="Enter CPU Model" id="cpu_model" />
+
+<button id="search">Search</button>
+
+<p>Integrated Graphics: <span id="graphics"></span></p>
+
+<script>
+  const cpuModelInput = document.getElementById("cpu_model");
+  const cpuModelSearchBtn = document.getElementById("search");
+  const graphicsTextContent = document.getElementById("graphics");
+
+  cpuModelSearchBtn.addEventListener("click", async () => {
+    const result = await fetch("/amd/"+cpuModelInput.value);
+    const resultJson = await result.json();
+
+    if (resultJson["error"]) {
+      return;
+    }
+
+    graphicsTextContent.textContent = resultJson["integrated_graphics"]
+    cpuModelInput.value = ""
+  })
+</script>
