@@ -40,26 +40,10 @@
   }
 </style>
 
-<input placeholder="Enter CPU Model" id="cpu_model" />
+<title>CPU</title>
 
-<button id="search">Search</button>
-
-<p>Integrated Graphics: <span id="graphics"></span></p>
-
-<script>
-  const cpuModelInput = document.getElementById("cpu_model");
-  const cpuModelSearchBtn = document.getElementById("search");
-  const graphicsTextContent = document.getElementById("graphics");
-
-  cpuModelSearchBtn.addEventListener("click", async () => {
-    const result = await fetch("/amd/"+cpuModelInput.value);
-    const resultJson = await result.json();
-
-    if (resultJson["error"]) {
-      return;
-    }
-
-    graphicsTextContent.textContent = resultJson["integrated_graphics"]
-    cpuModelInput.value = ""
-  })
-</script>
+{% if cpu %}
+<p>Integrated Graphics <span>{{ cpu }}</span></p>
+{% else %}
+<p>Error: <span>Not Found</span></p>
+{% endif %}

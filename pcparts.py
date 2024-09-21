@@ -15,8 +15,8 @@ async def get_amd_cpu(offset1=""):
     resultJson = json.loads(result.to_json())
     for cpu in resultJson["cpu"]:
         if cpu["brand"] == "AMD" and cpu["model"] == offset1:
-            return cpu
-    return json.dumps({ "error": "not found" })
+            return render_template("./index.html", cpu=cpu["integrated_graphics"])
+    return render_template("./index.html", error="not found")
 
 if __name__ == "__main__":
     app.run()
