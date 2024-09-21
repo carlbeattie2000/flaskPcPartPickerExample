@@ -1,23 +1,37 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request
 from pcpartpicker import API
-import json
 
 app = Flask(__name__)
 pcpartpickerapi = API()
 
+
 @app.route("/")
 def get_home_page():
-    return render_template("./index.html")
+    return redirect("/cpu")
 
-@app.route("/amd/<string:offset1>")
-async def get_amd_cpu(offset1=""):
-    result = await pcpartpickerapi.retrieve("cpu")
-    resultJson = json.loads(result.to_json())
-    for cpu in resultJson["cpu"]:
-        if cpu["brand"] == "AMD" and cpu["model"] == offset1:
-            return render_template("./index.html", cpu=cpu["integrated_graphics"])
-    return render_template("./index.html", error="not found")
+
+@app.route("/cpu", methods=["GET", "POST"])
+async def get_amd_page():
+    if request.method == "POST":
+        if request.form['cpu'] == "" or request.form["brand"] == "":
+            return redirect("/cpu")
+
+        cpu_model = request.form["cpu"]
+        cpu_brand = request.form["brand"]
+        result = await pcpartpickerapi.retrieve("cpu")
+
+        for cpu in result["cpu"]:
+            if cpu.brand == cpu_brand and cpu.model == cpu_model:
+                return render_template("cpu_result.html", cpu=cpu)
+
+    brands = set()
+
+    cpus = await pcpartpickerapi.retrieve("cpu")
+
+    for cpu in cpus["cpu"]:
+        brands.add(cpu.brand)
+
+    return render_template("cpu_find.html", brands=brands)
 
 if __name__ == "__main__":
     app.run()
-

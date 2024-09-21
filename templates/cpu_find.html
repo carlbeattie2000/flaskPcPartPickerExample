@@ -1,0 +1,67 @@
+<style>
+  * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 62.5%;
+  }
+
+  body {
+    font-size: 1.6rem;
+    font-family: Arial;
+    margin: 1rem;
+  }
+
+  input {
+    padding: 1.5rem;
+    font-size: 2rem;
+    margin-right: .5rem;
+  }
+
+  button {
+    padding: 1.5rem;
+    font-size: 2rem;
+    background: transparent;
+    border: 1px solid #000;
+    border-radius: .6rem;
+    width: 20vw;
+    cursor: pointer;
+  }
+
+  select {
+    padding: 1.5rem;
+    font-size: 2rem;
+    background: transparent;
+    border: 1px solid #000;
+    border-radius: .6rem;
+    margin-right: .5rem;
+  }
+
+  p {
+    margin: 1rem 0 0 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  span {
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+</style>
+
+<title>CPU</title>
+
+<form action="/cpu" method="post">
+  <input placeholder="CPU Model" name="cpu" />
+  <select name="brand">
+    {% if brands|length > 0 %}
+      {% for brand in brands -%}
+        <option value="{{brand}}">{{brand}}</option>
+      {%- endfor %}
+    {% endif %}
+  </select>
+  <button type="submit">Find</button>
+</form>
